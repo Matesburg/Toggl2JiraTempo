@@ -107,23 +107,29 @@ class ToggleAPI:
             # Enrich entries with project names and client filter
             enriched_entries = []
             for entry in entries:
+                # Skip entries that are still running (Toggle has no stop time yet
+                # and reports duration as a negative placeholder value)
+                if entry.get('stop') is None or entry.get('duration', 0) < 0:
+                    logger.info(f"Skipping entry {entry.get('id')}: still running (no stop time)")
+                    continue
+
                 project_id = entry.get('project_id')
                 if not project_id:
                     continue
-                
+
                 project_data = project_map.get(project_id)
                 if not project_data:
                     continue
-                
+
                 project_name = project_data.get('name', 'Unknown Project')
-                
+
                 # Filter by client name if applicable
                 if not self._matches_client_filter(project_data):
                     continue
-                
+
                 entry['project_name'] = project_name
                 enriched_entries.append(entry)
-            
+
             logger.info(f"Retrieved {len(enriched_entries)} entries matching client filter")
             return enriched_entries
         
