@@ -1,5 +1,5 @@
 """
-Toggle API client for fetching time entries.
+Toggl API client for fetching time entries.
 """
 
 import requests
@@ -11,8 +11,8 @@ from config import get_config
 logger = logging.getLogger(__name__)
 
 
-class ToggleAPI:
-    """Toggle API client for time entry operations."""
+class TogglAPI:
+    """Toggl API client for time entry operations."""
     
     BASE_URL = 'https://api.track.toggl.com/api/v9'
     
@@ -23,12 +23,12 @@ class ToggleAPI:
     
     def _get_basic_auth(self):
         """Generate basic auth header from API token."""
-        # Toggle API v9 uses API token with ':api_token' suffix
+        # Toggl API v9 uses API token with ':api_token' suffix
         credentials = base64.b64encode(f"{self.api_token}:api_token".encode()).decode()
         return f"Basic {credentials}"
     
     def _make_request(self, method, endpoint, params=None, data=None, retry_count=0, max_retries=3):
-        """Make HTTP request to Toggle API with rate limit handling."""
+        """Make HTTP request to Toggl API with rate limit handling."""
         url = f"{self.BASE_URL}{endpoint}"
         headers = {
             'Authorization': self.auth,
@@ -53,18 +53,18 @@ class ToggleAPI:
                     return self._make_request(method, endpoint, params, data, retry_count + 1, max_retries)
                 else:
                     logger.error(f"Max retries exceeded for rate limit")
-                    raise Exception("Toggle API rate limit exceeded")
+                    raise Exception("Toggl API rate limit exceeded")
             
             response.raise_for_status()
             return response.json()
         
         except requests.exceptions.RequestException as e:
-            logger.error(f"Toggle API request failed: {e}")
+            logger.error(f"Toggl API request failed: {e}")
             raise
     
     def get_time_entries(self, start_date, end_date=None):
         """
-        Fetch time entries from Toggle.
+        Fetch time entries from Toggl.
         
         Args:
             start_date: Start date (YYYY-MM-DD format, ISO timestamp, or datetime object)
@@ -89,7 +89,7 @@ class ToggleAPI:
         if isinstance(end_date, datetime):
             end_date = end_date.strftime('%Y-%m-%d')
         
-        logger.info(f"Fetching Toggle entries from {start_date} to {end_date}")
+        logger.info(f"Fetching Toggl entries from {start_date} to {end_date}")
         
         params = {
             'start_date': f"{start_date}T00:00:00Z",
@@ -107,7 +107,7 @@ class ToggleAPI:
             # Enrich entries with project names and client filter
             enriched_entries = []
             for entry in entries:
-                # Skip entries that are still running (Toggle has no stop time yet
+                # Skip entries that are still running (Toggl has no stop time yet
                 # and reports duration as a negative placeholder value)
                 if entry.get('stop') is None or entry.get('duration', 0) < 0:
                     logger.info(f"Skipping entry {entry.get('id')}: still running (no stop time)")
@@ -134,7 +134,7 @@ class ToggleAPI:
             return enriched_entries
         
         except Exception as e:
-            logger.error(f"Failed to fetch Toggle entries: {e}")
+            logger.error(f"Failed to fetch Toggl entries: {e}")
             raise
     
     def _get_projects(self):

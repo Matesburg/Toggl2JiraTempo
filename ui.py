@@ -25,7 +25,7 @@ class ReviewUI:
         Add entry to sync review list.
         
         Args:
-            entry_data: Toggle entry dict
+            entry_data: Toggl entry dict
             status: 'new', 'update', 'duplicate', 'conflict', 'invalid', 'parse_error'
             validation_status: 'valid', 'invalid_issue', 'parse_error'
             issue_key: Extracted/corrected issue key
@@ -57,7 +57,7 @@ class ReviewUI:
     def display_summary(self):
         """Display summary of entries ready for sync."""
         print("\n" + "="*80)
-        print("SYNC REVIEW - Toggle Time Entries to Jira")
+        print("SYNC REVIEW - Toggl Time Entries to Jira")
         print("="*80)
         
         total_entries = len(self.entries_to_sync) + len(self.invalid_entries) + len(self.conflicted_entries) + len(self.duplicate_entries)
@@ -191,7 +191,7 @@ class ReviewUI:
         print("-" * 80)
         
         for idx, entry in enumerate(self.invalid_entries, 1):
-            print(f"\n  {idx}. Toggle Entry #{entry['toggle_id']}")
+            print(f"\n  {idx}. Toggl Entry #{entry['toggle_id']}")
             print(f"     Project: {entry['project_name']}")
             print(f"     Description: {entry['description']}")
             print(f"     Duration: {entry['duration']}")
@@ -209,7 +209,7 @@ class ReviewUI:
         
         for idx, entry in enumerate(self.conflicted_entries, 1):
             print(f"\n  {idx}. Issue: {entry['issue_key']}")
-            print(f"     Toggle Entry: #{entry['toggle_id']}")
+            print(f"     Toggl Entry: #{entry['toggle_id']}")
             print(f"     Description: {entry['description']}")
             print(f"     ⚠ Worklog already exists in Jira for this date/issue")
     
@@ -230,7 +230,7 @@ class ReviewUI:
         
         for entry in self.invalid_entries:
             toggle_id = entry['toggle_id']
-            print(f"\n\nToggle Entry #{toggle_id}: {entry['project_name']}")
+            print(f"\n\nToggl Entry #{toggle_id}: {entry['project_name']}")
             print(f"  Description: {entry['description']}")
             print(f"  Duration: {entry['duration']}")
             print(f"\nOptions:")
@@ -285,11 +285,11 @@ class ReviewUI:
         for entry in self.conflicted_entries:
             toggle_id = entry['toggle_id']
             print(f"\n\nIssue {entry['issue_key']}: Worklog already exists")
-            print(f"  Toggle Entry: #{toggle_id}")
+            print(f"  Toggl Entry: #{toggle_id}")
             print(f"  Description: {entry['description']}")
             print(f"\nOptions:")
             print("  (s) Skip this entry (don't update)")
-            print("  (o) Overwrite with Toggle data (trust Toggle as source of truth)")
+            print("  (o) Overwrite with Toggl data (trust Toggl as source of truth)")
             
             while True:
                 choice = input("\nYour choice (s/o): ").strip().lower()
@@ -300,7 +300,7 @@ class ReviewUI:
                     break
                 elif choice == 'o':
                     decisions[toggle_id] = 'overwrite'
-                    print("  → Will update with Toggle data")
+                    print("  → Will update with Toggl data")
                     # Move from conflicted to sync list
                     self.entries_to_sync.append(entry)
                     self.conflicted_entries.remove(entry)

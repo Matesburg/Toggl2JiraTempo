@@ -1,5 +1,5 @@
 """
-Main entry point for Toggle to Jira Tempo sync CLI application.
+Main entry point for Toggl to Jira Tempo sync CLI application.
 """
 
 import sys
@@ -35,7 +35,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 from config import get_config
-from toggle_api import ToggleAPI
+from toggl_api import TogglAPI
 from jira_api import JiraAPI
 from db import get_db
 from sync_engine import SyncEngine
@@ -57,7 +57,7 @@ def main():
         
         # Initialize API clients
         logger.info("Initializing API clients...")
-        toggle_api = ToggleAPI(config.toggle_api_token, config.toggle_workspace_id)
+        toggle_api = TogglAPI(config.toggle_api_token, config.toggle_workspace_id)
         jira_api = JiraAPI(config.jira_url, config.jira_email, config.jira_api_token)
         
         # Test API connections
@@ -103,23 +103,23 @@ def main():
             start_date = user_date if user_date else config.first_sync_date
             is_first_run = True
         
-        # Fetch entries from Toggle
-        print(f"\n📥 Fetching Toggle Entries...")
+        # Fetch entries from Toggl
+        print(f"\n📥 Fetching Toggl Entries...")
         print("-" * 80)
         logger.info(f"Fetching entries from {start_date}")
         
         try:
             toggle_entries = toggle_api.get_time_entries(start_date)
-            print(f"✓ Retrieved {len(toggle_entries)} entries from Toggle")
-            logger.info(f"Retrieved {len(toggle_entries)} Toggle entries")
+            print(f"✓ Retrieved {len(toggle_entries)} entries from Toggl")
+            logger.info(f"Retrieved {len(toggle_entries)} Toggl entries")
         except Exception as e:
-            print(f"✗ Failed to fetch Toggle entries: {e}")
-            logger.error(f"Failed to fetch Toggle entries: {e}")
+            print(f"✗ Failed to fetch Toggl entries: {e}")
+            logger.error(f"Failed to fetch Toggl entries: {e}")
             return 1
         
         if not toggle_entries:
             print("ℹ No entries found for sync period")
-            logger.info("No entries found in Toggle for sync period")
+            logger.info("No entries found in Toggl for sync period")
             return 0
         
         # Initialize sync engine

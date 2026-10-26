@@ -117,9 +117,9 @@ class SyncDatabase:
         ''', (watermark,))
         self.conn.commit()
     
-    # Toggle Entry Methods
+    # Toggl Entry Methods
     def save_toggle_entry(self, entry_data):
-        """Save a Toggle entry to the database."""
+        """Save a Toggl entry to the database."""
         cursor = self.conn.cursor()
         try:
             cursor.execute('''
@@ -140,20 +140,20 @@ class SyncDatabase:
             print(f"Error saving toggle entry {entry_data['id']}: {e}")
     
     def get_toggle_entry(self, toggle_id):
-        """Get a Toggle entry by ID."""
+        """Get a Toggl entry by ID."""
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM toggle_entries WHERE toggle_id = ?', (toggle_id,))
         return cursor.fetchone()
     
     def get_all_toggle_entries(self):
-        """Get all Toggle entries."""
+        """Get all Toggl entries."""
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM toggle_entries')
         return cursor.fetchall()
     
     # Worklog Map Methods
     def save_worklog_mapping(self, toggle_id, jira_worklog_id, jira_issue_key, status='synced'):
-        """Save mapping between Toggle entry and Jira worklog."""
+        """Save mapping between Toggl entry and Jira worklog."""
         cursor = self.conn.cursor()
         cursor.execute('''
             INSERT OR REPLACE INTO worklog_map 
@@ -163,7 +163,7 @@ class SyncDatabase:
         self.conn.commit()
     
     def get_worklog_mapping(self, toggle_id):
-        """Get worklog mapping for a Toggle entry."""
+        """Get worklog mapping for a Toggl entry."""
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM worklog_map WHERE toggle_id = ?', (toggle_id,))
         return cursor.fetchone()
