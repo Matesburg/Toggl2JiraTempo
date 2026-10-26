@@ -20,7 +20,7 @@ Edit `.env` and fill in your credentials:
 # Toggl API Configuration
 TOGGL_API_TOKEN=YOUR_TOGGL_API_TOKEN_HERE
 TOGGL_WORKSPACE_ID=YOUR_WORKSPACE_ID_HERE
-TOGGL_CLIENT_NAME=CGC Consulting
+TOGGL_CLIENT_ID=YOUR_TOGGL_CLIENT_ID_HERE
 
 # Jira Cloud Configuration
 JIRA_URL=https://your-domain.atlassian.net
@@ -147,13 +147,15 @@ Just leave the default, and the script will prompt you.
 
 ### Client Filter
 
-The tool filters by client name. Make sure your Toggl client is named exactly:
+The tool filters by client **ID**, not by name, since client names can be renamed later while the ID stays stable:
 ```env
-TOGGL_CLIENT_NAME=CGC Consulting
+TOGGL_CLIENT_ID=66299554
 ```
 
+See the README's "Finding Your API Tokens" section for how to look up your client ID.
+
 If entries aren't showing up, check:
-1. Is the client name correct in Toggl?
+1. Is the client ID correct?
 2. Are the projects assigned to this client?
 
 ---
@@ -224,11 +226,9 @@ curl -H "Authorization: Basic $(echo -n 'YOUR_TOKEN:api_token' | base64)" \
 - Sync runs but finds 0 entries
 
 **Troubleshooting:**
-1. **Check client name**: Is it exactly `CGC Consulting` in Toggl?
-   - Case-sensitive!
-   - Must match exactly
+1. **Check client ID**: Does `TOGGL_CLIENT_ID` in `.env` match the client's ID in Toggl?
 2. **Check date range**: Do you have entries in that date range?
-3. **Check projects**: Are projects assigned to the CGC Consulting client?
+3. **Check projects**: Are projects assigned to that client?
 4. **Check project names**: Do they start with Jira issue key format?
    - Valid: `VCGCC-65 Feature`
    - Invalid: `Feature VCGCC-65` (wrong order)
