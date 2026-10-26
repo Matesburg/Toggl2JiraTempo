@@ -1,4 +1,4 @@
-# Setup Guide - Toggle to Jira Tempo Sync Tool
+# Setup Guide - Toggl to Jira Tempo Sync Tool
 
 ## Quick Start (5 minutes)
 
@@ -17,10 +17,10 @@ cp .env.example .env
 
 Edit `.env` and fill in your credentials:
 ```env
-# Toggle API Configuration
-TOGGLE_API_TOKEN=YOUR_TOGGLE_API_TOKEN_HERE
-TOGGLE_WORKSPACE_ID=YOUR_WORKSPACE_ID_HERE
-TOGGLE_CLIENT_NAME=CGC Consulting
+# Toggl API Configuration
+TOGGL_API_TOKEN=YOUR_TOGGL_API_TOKEN_HERE
+TOGGL_WORKSPACE_ID=YOUR_WORKSPACE_ID_HERE
+TOGGL_CLIENT_NAME=CGC Consulting
 
 # Jira Cloud Configuration
 JIRA_URL=https://your-domain.atlassian.net
@@ -42,9 +42,9 @@ python main.py
 
 ## Detailed Setup Instructions
 
-### Getting Toggle API Token
+### Getting Toggl API Token
 
-1. Open Toggle: https://track.toggl.com/app
+1. Open Toggl: https://track.toggl.com/app
 2. Click your **Profile** icon (top-right)
 3. Select **Settings**
 4. Scroll to **API Token** section
@@ -52,7 +52,7 @@ python main.py
 
 **Note:** Keep this token secret - it gives access to your time entries!
 
-### Finding Toggle Workspace ID
+### Finding Toggl Workspace ID
 
 **Quick Method - From Dropdown:**
 1. Go to https://track.toggl.com/app
@@ -62,12 +62,12 @@ python main.py
 
 **Most Reliable Method - Using PowerShell:**
 
-Since Toggle's UI can be inconsistent, here's the guaranteed way:
+Since Toggl's UI can be inconsistent, here's the guaranteed way:
 
-1. First, get your Toggle API token (from https://track.toggl.com/app/profile)
+1. First, get your Toggl API token (from https://track.toggl.com/app/profile)
 2. Open PowerShell and run:
 ```powershell
-$token = "YOUR_TOGGLE_API_TOKEN_HERE"
+$token = "YOUR_TOGGL_API_TOKEN_HERE"
 $auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${token}:api_token"))
 $response = Invoke-RestMethod -Uri "https://api.track.toggl.com/api/v8/me" `
   -Headers @{Authorization = "Basic $auth"}
@@ -80,7 +80,7 @@ $response.workspaces[0].id
 2. Open Developer Tools (Press F12)
 3. Go to **Network** tab
 4. Refresh page (F5)
-5. Click on any Toggle API request
+5. Click on any Toggl API request
 6. Look in **Request Headers** for `Workspace-ID` header
 7. Copy that number
 
@@ -88,7 +88,7 @@ $response.workspaces[0].id
 
 1. Open Jira: https://id.atlassian.com/manage-profile/security/api-tokens
 2. Click **Create API token**
-3. Name it "Toggle Sync" or similar
+3. Name it "Toggl Sync" or similar
 4. Copy the token immediately (you can't view it again)
 
 **Scopes needed:**
@@ -104,7 +104,7 @@ Use your domain:
 
 ## Verification Steps
 
-### Test Toggle Connection
+### Test Toggl Connection
 
 ```bash
 # Replace with your token
@@ -112,7 +112,7 @@ curl -H "Authorization: Basic $(echo -n 'YOUR_TOKEN:api_token' | base64)" \
      https://api.track.toggl.com/api/v8/me
 ```
 
-Should return your Toggle profile info.
+Should return your Toggl profile info.
 
 ### Test Jira Connection
 
@@ -147,13 +147,13 @@ Just leave the default, and the script will prompt you.
 
 ### Client Filter
 
-The tool filters by client name. Make sure your Toggle client is named exactly:
+The tool filters by client name. Make sure your Toggl client is named exactly:
 ```env
-TOGGLE_CLIENT_NAME=CGC Consulting
+TOGGL_CLIENT_NAME=CGC Consulting
 ```
 
 If entries aren't showing up, check:
-1. Is the client name correct in Toggle?
+1. Is the client name correct in Toggl?
 2. Are the projects assigned to this client?
 
 ---
@@ -164,7 +164,7 @@ If entries aren't showing up, check:
 
 **Error:**
 ```
-❌ Missing required configuration: TOGGLE_API_TOKEN, JIRA_API_TOKEN
+❌ Missing required configuration: TOGGL_API_TOKEN, JIRA_API_TOKEN
 ```
 
 **Fix:**
@@ -202,10 +202,10 @@ curl -u "your-email@example.com" https://your-domain.atlassian.net/rest/api/3/my
 # Enter API token as password when prompted
 ```
 
-### "Toggle authentication failed"
+### "Toggl authentication failed"
 
 **Symptoms:**
-- Error when fetching Toggle entries
+- Error when fetching Toggl entries
 - "401 Unauthorized"
 
 **Troubleshooting:**
@@ -224,7 +224,7 @@ curl -H "Authorization: Basic $(echo -n 'YOUR_TOKEN:api_token' | base64)" \
 - Sync runs but finds 0 entries
 
 **Troubleshooting:**
-1. **Check client name**: Is it exactly `CGC Consulting` in Toggle?
+1. **Check client name**: Is it exactly `CGC Consulting` in Toggl?
    - Case-sensitive!
    - Must match exactly
 2. **Check date range**: Do you have entries in that date range?
@@ -247,14 +247,14 @@ Then run again and check `logs/sync_*.log` for detailed output.
 ## File Structure After Setup
 
 ```
-Toggle2JiraTempo/
+Toggl2JiraTempo/
 ├── .env                    ← Your credentials (NOT in git!)
 ├── .env.example           ← Template (safe to commit)
 ├── .gitignore            ← Ignore .env, logs, db
 ├── requirements.txt       ← Python dependencies
 ├── main.py               ← Main entry point - RUN THIS
 ├── config.py             ← Load credentials
-├── toggle_api.py         ← Toggle API client
+├── toggl_api.py          ← Toggl API client
 ├── jira_api.py           ← Jira API client
 ├── db.py                 ← SQLite database
 ├── sync_engine.py        ← Core sync logic

@@ -20,10 +20,10 @@ class Validator:
     @staticmethod
     def extract_issue_key(project_name):
         """
-        Extract Jira issue key from Toggle project name.
+        Extract Jira issue key from Toggl project name.
         
         Args:
-            project_name: Toggle project name (e.g., 'VCGCC-65 Implement feature')
+            project_name: Toggl project name (e.g., 'VCGCC-65 Implement feature')
         
         Returns:
             Tuple of (issue_key, success) where issue_key is str or None
@@ -61,7 +61,7 @@ class Validator:
         Calculate hash of entry to detect modifications.
         
         Args:
-            entry_data: Toggle entry dict with start, duration, description
+            entry_data: Toggl entry dict with start, duration, description
         
         Returns:
             Hash string
@@ -115,19 +115,19 @@ class Validator:
     @staticmethod
     def convert_toggle_timestamp_to_jira(toggle_start_str):
         """
-        Convert Toggle ISO 8601 timestamp to Jira format.
+        Convert Toggl ISO 8601 timestamp to Jira format.
         
-        Toggle: 2024-01-15T14:30:00Z (UTC)
+        Toggl: 2024-01-15T14:30:00Z (UTC)
         Jira: 2024-01-15T14:30:00.000+0000
         
         Args:
-            toggle_start_str: ISO 8601 string from Toggle
+            toggle_start_str: ISO 8601 string from Toggl
         
         Returns:
             Jira-formatted timestamp string
         """
         try:
-            # Parse Toggle timestamp (format: 2024-01-15T14:30:00Z)
+            # Parse Toggl timestamp (format: 2024-01-15T14:30:00Z)
             dt = datetime.fromisoformat(toggle_start_str.replace('Z', '+00:00'))
             
             # Format for Jira (format: 2024-01-15T14:30:00.000+0000)
@@ -139,10 +139,10 @@ class Validator:
     @staticmethod
     def format_entry_for_display(entry):
         """
-        Format a Toggle entry for display in review UI.
+        Format a Toggl entry for display in review UI.
         
         Args:
-            entry: Toggle entry dict
+            entry: Toggl entry dict
         
         Returns:
             Formatted dict for display
@@ -163,10 +163,10 @@ class ConflictDetector:
     @staticmethod
     def is_duplicate(toggle_id, existing_mapping):
         """
-        Check if Toggle entry already synced.
+        Check if Toggl entry already synced.
         
         Args:
-            toggle_id: Toggle entry ID
+            toggle_id: Toggl entry ID
             existing_mapping: Row from worklog_map table or None
         
         Returns:
@@ -196,7 +196,7 @@ class ConflictDetector:
         Args:
             issue_key: Jira issue key
             jira_worklog: Existing Jira worklog or None
-            toggle_id: Toggle entry ID
+            toggle_id: Toggl entry ID
         
         Returns:
             Tuple of (has_conflict, conflict_description)
@@ -204,6 +204,6 @@ class ConflictDetector:
         if not jira_worklog:
             return False, None
         
-        # Check if worklog has our Toggle ID marker
+        # Check if worklog has our Toggl ID marker
         # For now simplified - needs to be implemented with actual worklog comment parsing
         return False, None

@@ -1,16 +1,16 @@
-# Toggle to Jira Tempo Sync Tool
+# Toggl to Jira Tempo Sync Tool
 
-A Python CLI tool to automatically sync time entries from Toggle time tracking to Jira Cloud worklogs, with comprehensive validation, deduplication, and user control mechanisms.
+A Python CLI tool to automatically sync time entries from Toggl time tracking to Jira Cloud worklogs, with comprehensive validation, deduplication, and user control mechanisms.
 
 ## Features
 
-✓ **Automatic Issue Key Extraction** - Parses Jira issue keys from Toggle project names (e.g., `VCGCC-65 Feature Name` → `VCGCC-65`)
+✓ **Automatic Issue Key Extraction** - Parses Jira issue keys from Toggl project names (e.g., `VCGCC-65 Feature Name` → `VCGCC-65`)
 
 ✓ **Issue Validation** - Checks if Jira issues exist before syncing; warns user and allows corrections
 
-✓ **Deduplication** - Prevents duplicate worklogs by tracking synced Toggle entries in SQLite database
+✓ **Deduplication** - Prevents duplicate worklogs by tracking synced Toggl entries in SQLite database
 
-✓ **Update Detection** - Automatically detects when Toggle entries are modified and updates Jira worklogs accordingly
+✓ **Update Detection** - Automatically detects when Toggl entries are modified and updates Jira worklogs accordingly
 
 ✓ **Smart Time Rounding** - Rounds seconds UP to whole minutes (Jira Tempo doesn't support seconds)
 
@@ -20,7 +20,7 @@ A Python CLI tool to automatically sync time entries from Toggle time tracking t
 
 ✓ **Conflict Detection** - Warns about existing Jira worklogs; lets user decide to skip or overwrite
 
-✓ **Rate Limit Handling** - Implements exponential backoff for Toggle API rate limiting
+✓ **Rate Limit Handling** - Implements exponential backoff for Toggl API rate limiting
 
 ✓ **Comprehensive Logging** - All operations logged to files for audit trail and troubleshooting
 
@@ -28,7 +28,7 @@ A Python CLI tool to automatically sync time entries from Toggle time tracking t
 
 ### Prerequisites
 - Python 3.8+
-- Toggle API token (from Toggle profile settings)
+- Toggl API token (from Toggl profile settings)
 - Jira Cloud instance with API access
 - Jira API token (from account settings)
 
@@ -36,7 +36,7 @@ A Python CLI tool to automatically sync time entries from Toggle time tracking t
 
 1. Clone or download this tool:
 ```bash
-cd Toggle2JiraTempo
+cd Toggl2JiraTempo
 ```
 
 2. Install dependencies:
@@ -51,9 +51,9 @@ cp .env.example .env
 
 4. Edit `.env` with your credentials:
 ```env
-TOGGLE_API_TOKEN=your_toggle_token_here
-TOGGLE_WORKSPACE_ID=your_workspace_id
-TOGGLE_CLIENT_ID=your_toggle_client_id
+TOGGL_API_TOKEN=your_toggl_token_here
+TOGGL_WORKSPACE_ID=your_workspace_id
+TOGGL_CLIENT_ID=your_toggl_client_id
 
 JIRA_URL=https://your-domain.atlassian.net
 JIRA_EMAIL=your-email@example.com
@@ -65,23 +65,23 @@ LOG_LEVEL=INFO
 
 ## Finding Your API Tokens
 
-### Toggle API Token
+### Toggl API Token
 1. Go to https://track.toggl.com/app/profile
 2. Scroll to "API Token" section
 3. Copy the token
 
-### Toggle Workspace ID
+### Toggl Workspace ID
 
 **Method 1: From Workspace Dropdown (Easiest)**
 1. Go to https://track.toggl.com/app
 2. Look at **top-left** - click the workspace name dropdown (e.g., "Sám na sebe" or your workspace name)
 3. This should show your workspace ID in the list
 
-**Method 2: Using Toggle API (Most Reliable - v9)**
-1. Get your Toggle API token first (see above)
+**Method 2: Using Toggl API (Most Reliable - v9)**
+1. Get your Toggl API token first (see above)
 2. Open PowerShell and run:
 ```powershell
-$token = "YOUR_TOGGLE_API_TOKEN"
+$token = "YOUR_TOGGL_API_TOKEN"
 $auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${token}:api_token"))
 $response = Invoke-RestMethod -Uri "https://api.track.toggl.com/api/v9/me" `
   -Headers @{Authorization = "Basic $auth"}
@@ -94,19 +94,19 @@ $response.workspace_id
 2. Press **F12** to open Developer Tools
 3. Go to **Network** tab
 4. Refresh the page (F5)
-5. Click on any Toggle API request
+5. Click on any Toggl API request
 6. Look in **Request Headers** for `Workspace-ID`
 
 **Note:** Workspace ID is typically a 7-8 digit number. If you only have one workspace, that's your ID.
 
-### Toggle Client ID
+### Toggl Client ID
 
 Filtering is done by client **ID**, not by name, since client names can be renamed later while the ID stays stable.
 
-1. Get your Toggle API token and workspace ID first (see above)
+1. Get your Toggl API token and workspace ID first (see above)
 2. Open PowerShell and run:
 ```powershell
-$token = "YOUR_TOGGLE_API_TOKEN"
+$token = "YOUR_TOGGL_API_TOKEN"
 $workspaceId = "YOUR_WORKSPACE_ID"
 $auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${token}:api_token"))
 $response = Invoke-RestMethod -Uri "https://api.track.toggl.com/api/v9/workspaces/$workspaceId/clients" `
@@ -155,7 +155,7 @@ To test without making actual changes:
 ## Workflow
 
 ### 1. Entry Preparation
-- Fetches Toggle entries from start date (first day of last synced month, or user-specified date)
+- Fetches Toggl entries from start date (first day of last synced month, or user-specified date)
 - Rounds all entry times UP to whole minutes (Jira Tempo limitation)
 - Filters by client ID
 - Extracts Jira issue keys from project names
@@ -174,7 +174,7 @@ To test without making actual changes:
 
 ### 3. Conflict Resolution
 - Detects if Jira worklog already exists
-- Prompts user to skip or overwrite with Toggle data
+- Prompts user to skip or overwrite with Toggl data
 
 ### 4. Final Approval
 - Shows summary of entries to be synced
@@ -194,7 +194,7 @@ To test without making actual changes:
 
 ## Issue Key Format Requirements
 
-Toggle project names must start with Jira issue key in format: `KEY-123`
+Toggl project names must start with Jira issue key in format: `KEY-123`
 
 **Valid examples:**
 - `VCGCC-65 Implement feature`
@@ -215,8 +215,8 @@ If a project doesn't match this pattern, the sync will warn you and allow correc
 The tool maintains `sync_state.db` with:
 
 - **sync_state** - Last watermark timestamp for incremental syncs
-- **toggle_entries** - Cached Toggle entries with hashes for change detection
-- **worklog_map** - Mapping of Toggle entries to Jira worklogs (for deduplication)
+- **toggle_entries** - Cached Toggl entries with hashes for change detection
+- **worklog_map** - Mapping of Toggl entries to Jira worklogs (for deduplication)
 - **sync_history** - History of all sync runs and results
 - **issue_validation_cache** - Cached Jira issue existence checks (1-hour TTL)
 
@@ -236,7 +236,7 @@ All operations logged to `logs/sync_YYYYMMDD_HHMMSS.log`
 - Ensure API token wasn't revoked
 - Check that token has `write:jira-work` scope
 
-### "Toggle API rate limit exceeded"
+### "Toggl API rate limit exceeded"
 - Tool implements automatic backoff, but retry later if persists
 - Reduce sync frequency or fetch smaller date ranges
 
@@ -273,7 +273,7 @@ db.close()
 
 - **main.py** - CLI entry point, user interaction flow
 - **config.py** - Load credentials from .env
-- **toggle_api.py** - Toggle API client with rate limiting
+- **toggl_api.py** - Toggl API client with rate limiting
 - **jira_api.py** - Jira Cloud API client with issue validation
 - **db.py** - SQLite database for state management
 - **sync_engine.py** - Core sync logic and orchestration
@@ -294,7 +294,7 @@ db.close()
 Check logs in `logs/` directory for detailed error messages.
 
 For API credential issues, verify:
-1. Toggle token works: https://api.track.toggl.com/api/v9/me
+1. Toggl token works: https://api.track.toggl.com/api/v9/me
 2. Jira token works: `https://your-domain.atlassian.net/rest/api/3/myself`
 
 ## Future Enhancements

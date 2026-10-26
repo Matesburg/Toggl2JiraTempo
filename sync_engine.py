@@ -1,5 +1,5 @@
 """
-Core sync engine logic for orchestrating Toggle to Jira sync operations.
+Core sync engine logic for orchestrating Toggl to Jira sync operations.
 """
 
 import logging
@@ -7,14 +7,14 @@ import uuid
 from datetime import datetime
 from validator import Validator, ConflictDetector
 from db import SyncDatabase
-from toggle_api import ToggleAPI
+from toggl_api import TogglAPI
 from jira_api import JiraAPI
 
 logger = logging.getLogger(__name__)
 
 
 class SyncEngine:
-    """Main sync engine for Toggle to Jira transfers."""
+    """Main sync engine for Toggl to Jira transfers."""
     
     def __init__(self, toggle_api, jira_api, db):
         self.toggle_api = toggle_api
@@ -36,7 +36,7 @@ class SyncEngine:
         Prepare entries for sync with validation and conflict detection.
         
         Args:
-            entries: List of Toggle entries
+            entries: List of Toggl entries
         
         Returns:
             Dict mapping toggle_id to entry review data
@@ -135,11 +135,11 @@ class SyncEngine:
     
     def sync_entry(self, toggle_id, entry_data, issue_key, dry_run=False):
         """
-        Sync a single Toggle entry to Jira.
+        Sync a single Toggl entry to Jira.
         
         Args:
-            toggle_id: Toggle entry ID
-            entry_data: Toggle entry dict
+            toggle_id: Toggl entry ID
+            entry_data: Toggl entry dict
             issue_key: Target Jira issue key
             dry_run: If True, don't actually create/update
         
@@ -150,7 +150,7 @@ class SyncEngine:
             # Convert timestamps
             jira_timestamp = Validator.convert_toggle_timestamp_to_jira(entry_data['start'])
             
-            # Use Toggle description as Jira worklog comment
+            # Use Toggl description as Jira worklog comment
             description = entry_data.get('description', '')
             
             # Check for existing worklog mapping

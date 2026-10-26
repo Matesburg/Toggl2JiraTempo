@@ -1,5 +1,5 @@
 """
-Configuration management for Toggle to Jira Tempo sync.
+Configuration management for Toggl to Jira Tempo sync.
 Loads credentials from .env file or environment variables.
 """
 
@@ -14,10 +14,10 @@ class Config:
     """Configuration container for API credentials and settings."""
     
     def __init__(self):
-        # Toggle Configuration
-        self.toggle_api_token = os.getenv('TOGGLE_API_TOKEN')
-        self.toggle_workspace_id = os.getenv('TOGGLE_WORKSPACE_ID')
-        self.toggle_client_id = os.getenv('TOGGLE_CLIENT_ID')
+        # Toggl Configuration
+        self.toggle_api_token = os.getenv('TOGGL_API_TOKEN')
+        self.toggle_workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
+        self.toggle_client_id = os.getenv('TOGGL_CLIENT_ID')
         
         # Jira Configuration
         self.jira_url = os.getenv('JIRA_URL')
@@ -34,8 +34,8 @@ class Config:
     def _validate_config(self):
         """Validate that all required credentials are present."""
         required_fields = {
-            'TOGGLE_API_TOKEN': self.toggle_api_token,
-            'TOGGLE_WORKSPACE_ID': self.toggle_workspace_id,
+            'TOGGL_API_TOKEN': self.toggle_api_token,
+            'TOGGL_WORKSPACE_ID': self.toggle_workspace_id,
             'JIRA_URL': self.jira_url,
             'JIRA_EMAIL': self.jira_email,
             'JIRA_API_TOKEN': self.jira_api_token,

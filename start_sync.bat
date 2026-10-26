@@ -1,5 +1,5 @@
 @echo off
-REM Activates the local virtual environment and runs the Toggle - Jira Tempo sync CLI from the repository root.
+REM Activates the local virtual environment and runs the Toggl - Jira Tempo sync CLI from the repository root.
 setlocal
 
 cd /d "%~dp0"
