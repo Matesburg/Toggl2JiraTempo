@@ -56,7 +56,7 @@ python main.py
 
 **Quick Method - From Dropdown:**
 1. Go to https://track.toggl.com/app
-2. Click the **workspace name** at the top-left (e.g., "Sám na sebe", "My Workspace", etc.)
+2. Click the **workspace name** at the top-left (e.g., "My Workspace")
 3. Look for your workspace ID in the dropdown - it's a 7-8 digit number
 4. Example: `12345678` ← that's your Workspace ID
 

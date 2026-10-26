@@ -74,7 +74,7 @@ LOG_LEVEL=INFO
 
 **Method 1: From Workspace Dropdown (Easiest)**
 1. Go to https://track.toggl.com/app
-2. Look at **top-left** - click the workspace name dropdown (e.g., "Sám na sebe" or your workspace name)
+2. Look at **top-left** - click the workspace name dropdown
 3. This should show your workspace ID in the list
 
 **Method 2: Using Toggl API (Most Reliable - v9)**
