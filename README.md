@@ -4,7 +4,7 @@ A Python CLI tool to automatically sync time entries from Toggl time tracking to
 
 ## Features
 
-✓ **Automatic Issue Key Extraction** - Parses Jira issue keys from Toggl project names (e.g., `VCGCC-65 Feature Name` → `VCGCC-65`)
+✓ **Automatic Issue Key Extraction** - Parses Jira issue keys from Toggl project names (e.g., `PROJ-123 Feature Name` → `PROJ-123`)
 
 ✓ **Issue Validation** - Checks if Jira issues exist before syncing; warns user and allows corrections
 
@@ -197,14 +197,14 @@ To test without making actual changes:
 Toggl project names must start with Jira issue key in format: `KEY-123`
 
 **Valid examples:**
-- `VCGCC-65 Implement feature`
+- `PROJ-123 Implement feature`
 - `PROJ-123`
 - `ABC-999 Bug fix`
 
 **Invalid examples:**
 - `Implement feature` (no issue key)
-- `Feature VCGCC-65` (issue key not at start)
-- `VCGCC65 Feature` (no hyphen between letters and numbers)
+- `Feature PROJ-123` (issue key not at start)
+- `PROJ123 Feature` (no hyphen between letters and numbers)
 
 If a project doesn't match this pattern, the sync will warn you and allow correction before transfer.
 

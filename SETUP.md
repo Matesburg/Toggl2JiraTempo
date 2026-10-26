@@ -149,7 +149,7 @@ Just leave the default, and the script will prompt you.
 
 The tool filters by client **ID**, not by name, since client names can be renamed later while the ID stays stable:
 ```env
-TOGGL_CLIENT_ID=66299554
+TOGGL_CLIENT_ID=12345678
 ```
 
 See the README's "Finding Your API Tokens" section for how to look up your client ID.
@@ -230,8 +230,8 @@ curl -H "Authorization: Basic $(echo -n 'YOUR_TOKEN:api_token' | base64)" \
 2. **Check date range**: Do you have entries in that date range?
 3. **Check projects**: Are projects assigned to that client?
 4. **Check project names**: Do they start with Jira issue key format?
-   - Valid: `VCGCC-65 Feature`
-   - Invalid: `Feature VCGCC-65` (wrong order)
+   - Valid: `PROJ-123 Feature`
+   - Invalid: `Feature PROJ-123` (wrong order)
 
 ### Logs Aren't Helpful
 
